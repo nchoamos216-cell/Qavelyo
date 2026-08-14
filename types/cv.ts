@@ -34,6 +34,7 @@ export interface Project {
   title?: string;
   description?: string;
   url?: string;
+  link?: string;
   technologies?: string[] | string;
   startDate?: string;
   endDate?: string;
