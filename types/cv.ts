@@ -20,6 +20,7 @@ export interface Education {
   institution?: string;
   school?: string;
   location?: string;
+  city?: string;
   startDate: string;
   endDate: string;
   description?: string;
@@ -51,6 +52,7 @@ export interface CVData {
     title: string;
     summary?: string;
     website?: string;
+    linkedin?: string;
   };
   experiences: Experience[];
   educations?: Education[];
