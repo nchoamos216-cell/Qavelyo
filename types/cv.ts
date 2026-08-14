@@ -23,6 +23,8 @@ export interface Education {
   city?: string;
   startDate: string;
   endDate: string;
+  current?: boolean;
+  isCurrent?: boolean;
   description?: string;
 }
 
@@ -53,6 +55,7 @@ export interface CVData {
     summary?: string;
     website?: string;
     linkedin?: string;
+    photoUrl?: string;
   };
   experiences: Experience[];
   educations?: Education[];
