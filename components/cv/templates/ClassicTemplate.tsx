@@ -8,7 +8,10 @@ interface TemplateProps {
 }
 
 export default function ClassicTemplate({ data }: TemplateProps) {
-  const { personalInfo, summary, experiences, education, skills, languages } = data;
+  const { personalInfo, summary, experiences, education, educations, skills, languages } = data;
+  
+  // On fusionne education et educations pour être sûr d'avoir un tableau valide
+  const eduList = education || educations || [];
 
   return (
     <div className="w-[210mm] min-h-[297mm] bg-white text-slate-900 p-10 shadow-2xl mx-auto font-serif text-xs leading-relaxed">
@@ -34,7 +37,7 @@ export default function ClassicTemplate({ data }: TemplateProps) {
         </section>
       )}
 
-      {experiences.length > 0 && (
+      {experiences && experiences.length > 0 && (
         <section className="mb-6">
           <h2 className="text-xs font-bold uppercase border-b border-slate-400 pb-0.5 mb-3 tracking-wider">
             Parcours Professionnel
@@ -53,16 +56,16 @@ export default function ClassicTemplate({ data }: TemplateProps) {
         </section>
       )}
 
-      {education.length > 0 && (
+      {eduList.length > 0 && (
         <section className="mb-6">
           <h2 className="text-xs font-bold uppercase border-b border-slate-400 pb-0.5 mb-3 tracking-wider">
             Diplômes et Formations
           </h2>
           <div className="space-y-2">
-            {education.map((edu) => (
+            {eduList.map((edu) => (
               <div key={edu.id} className="flex justify-between">
                 <div>
-                  <span className="font-bold">{edu.degree}</span>, <span className="italic">{edu.school}</span>
+                  <span className="font-bold">{edu.degree}</span>, <span className="italic">{edu.school || edu.institution}</span>
                 </div>
                 <span className="text-[10px] text-slate-500">{edu.startDate} – {edu.endDate}</span>
               </div>
@@ -71,7 +74,7 @@ export default function ClassicTemplate({ data }: TemplateProps) {
         </section>
       )}
 
-      {skills.length > 0 && (
+      {skills && skills.length > 0 && (
         <section className="mb-6">
           <h2 className="text-xs font-bold uppercase border-b border-slate-400 pb-0.5 mb-2 tracking-wider">
             Compétences
