@@ -28,6 +28,16 @@ export interface Education {
   description?: string;
 }
 
+export interface Project {
+  id?: string;
+  name?: string;
+  title?: string;
+  description?: string;
+  url?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
 export interface Skill {
   id?: string;
   name: string;
@@ -62,6 +72,8 @@ export interface CVData {
   experiences: Experience[];
   educations?: Education[];
   education?: Education[];
+  projects?: Project[];
+  project?: Project[];
   skills: Skill[];
   languages?: Language[];
 }
