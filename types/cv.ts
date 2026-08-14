@@ -41,6 +41,7 @@ export interface Language {
 }
 
 export interface CVData {
+  id?: string;
   summary?: string;
   personalInfo: {
     fullName?: string;
