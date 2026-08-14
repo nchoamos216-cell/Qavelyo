@@ -1,4 +1,4 @@
-export type TemplateId = string; // ou tes identifiants de templates précis si tu en as
+export type TemplateId = string;
 
 export interface Experience {
   id?: string;
@@ -6,6 +6,7 @@ export interface Experience {
   position?: string;
   company: string;
   location?: string;
+  city?: string;
   startDate: string;
   endDate: string;
   current?: boolean;
@@ -16,7 +17,8 @@ export interface Experience {
 export interface Education {
   id?: string;
   degree: string;
-  institution: string;
+  institution?: string;
+  school?: string;
   location?: string;
   startDate: string;
   endDate: string;
@@ -36,6 +38,7 @@ export interface Language {
 }
 
 export interface CVData {
+  summary?: string;
   personalInfo: {
     fullName?: string;
     firstName?: string;
@@ -47,6 +50,7 @@ export interface CVData {
     country?: string;
     title: string;
     summary?: string;
+    website?: string;
   };
   experiences: Experience[];
   educations?: Education[];
