@@ -52,6 +52,20 @@ export interface Language {
   level?: string;
 }
 
+export interface Interest {
+  id?: string;
+  name: string;
+  title?: string;
+}
+
+export interface Reference {
+  id?: string;
+  name?: string;
+  company?: string;
+  phone?: string;
+  email?: string;
+}
+
 export interface CVData {
   id?: string;
   templateId?: string;
@@ -78,6 +92,8 @@ export interface CVData {
   project?: Project[];
   skills: Skill[];
   languages?: Language[];
-  interests?: string[] | string;
-  interest?: string[] | string;
+  interests?: Interest[];
+  interest?: Interest[];
+  references?: Reference[];
+  updatedAt?: string;
 }
