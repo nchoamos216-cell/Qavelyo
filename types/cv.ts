@@ -78,4 +78,6 @@ export interface CVData {
   project?: Project[];
   skills: Skill[];
   languages?: Language[];
+  interests?: string[] | string;
+  interest?: string[] | string;
 }
