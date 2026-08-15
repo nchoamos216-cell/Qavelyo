@@ -1,19 +1,25 @@
+'use client';
+
+import React, { useState } from 'react';
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import ProjectModal from "@/components/ProjectModal";
 
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <main className="min-h-screen bg-[#05080E] text-white selection:bg-[#FF6B00]/20 selection:text-white">
-      {/* Barre de Navigation */}
-      <Navbar />
-
-      {/* Hero Section - Présentation du Hub & Écosystème */}
-      <Hero />
-
+    <main className="min-h-screen bg-[#05080E] text-white">
+      {/* Passe bien la fonction ainsi */}
+      <Navbar onOpenModal={() => setIsModalOpen(true)} />
+      <Hero onOpenModal={() => setIsModalOpen(true)} />
+      
+      {/* ... le reste de ton code ... */}
+      
       {/* ==========================================
           SECTION 1 : QAVELYO PRODUCTS (Le Hub / Store d'Apps)
-         ========================================== */}
+          ========================================== */}
       <section id="produits" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5">
         <div className="flex flex-col items-center text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF6B00]/10 border border-[#FF6B00]/30 text-[#FF6B00] text-xs font-semibold uppercase tracking-wider">
@@ -59,7 +65,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Produit 2 : Prochainement (Carte Bientôt sans lien actif) */}
+          {/* Produit 2 : Prochainement */}
           <div className="glass-panel rounded-2xl p-6 border border-white/10 hover:border-[#FF6B00]/50 transition-all flex flex-col justify-between group">
             <div>
               <div className="flex justify-between items-start mb-4">
@@ -93,7 +99,7 @@ export default function Home() {
 
       {/* ==========================================
           SECTION 2 : QAVELYO SERVICES (Sur-Mesure)
-         ========================================== */}
+          ========================================== */}
       <section id="services" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5">
         <div className="flex flex-col items-center text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider">
@@ -105,6 +111,14 @@ export default function Home() {
           <p className="text-slate-400 max-w-2xl text-base sm:text-lg">
             Nous transformons vos idées et vos besoins en solutions numériques modernes, utiles et adaptées à votre activité.
           </p>
+          <div className="pt-2">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center gap-2 py-2.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all shadow-md cursor-pointer"
+            >
+              Commander un service 🚀
+            </button>
+          </div>
         </div>
 
         {/* Grille des Services */}
@@ -139,7 +153,7 @@ export default function Home() {
 
       {/* ==========================================
           SECTION 3 : NOTRE VISION & DÉMARCHE
-         ========================================== */}
+          ========================================== */}
       <section id="vision" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-6">
@@ -172,7 +186,7 @@ export default function Home() {
               <div className="text-white font-semibold text-sm mb-1">Développer</div>
               <div className="text-slate-400 text-xs">Transformer l'idée en véritable produit numérique.</div>
             </div>
-            <div className="glass-panel p-[#6] rounded-2xl border border-white/10 p-6">
+            <div className="glass-panel rounded-2xl border border-white/10 p-6">
               <div className="text-2xl font-bold text-[#FF6B00] mb-1">04</div>
               <div className="text-white font-semibold text-sm mb-1">Partager & Faire évoluer</div>
               <div className="text-slate-400 text-xs">Publier, recueillir les retours et améliorer continuellement la solution.</div>
@@ -183,7 +197,7 @@ export default function Home() {
 
       {/* ==========================================
           SECTION 4 : CONTACT & COMMANDE DE SERVICE
-         ========================================== */}
+          ========================================== */}
       <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5 text-center">
         <div className="max-w-3xl mx-auto space-y-6">
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
@@ -193,12 +207,12 @@ export default function Home() {
             Vous avez une idée, un besoin ou un problème qui pourrait être résolu par le numérique ? Parlons-en et imaginons ensemble une solution.
           </p>
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="mailto:qavelyo@gmail.com"
-              className="px-8 py-4 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white font-semibold text-base shadow-lg shadow-[#FF6B00]/25 transition-all"
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-8 py-4 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white font-semibold text-base shadow-lg shadow-[#FF6B00]/25 transition-all cursor-pointer"
             >
               Parler de mon projet
-            </a>
+            </button>
           </div>
           <p className="text-xs text-slate-500 pt-2">
             Contact direct : <span className="text-slate-300">qavelyo@gmail.com</span>
@@ -215,6 +229,9 @@ export default function Home() {
           © {new Date().getFullYear()} QAVELYO. Tous droits réservés.
         </div>
       </footer>
+
+      {/* Modal interactif de commande de projet */}
+      <ProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </main>
   );
 }

@@ -2,7 +2,11 @@
 
 import Image from "next/image";
 
-export default function Hero() {
+interface HeroProps {
+  onOpenModal?: () => void;
+}
+
+export default function Hero({ onOpenModal }: HeroProps) {
   return (
     <section
       id="hero"
@@ -45,12 +49,12 @@ export default function Hero() {
                 </svg>
               </a>
 
-              <a
-                href="#services"
-                className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-sm border border-white/10 transition-all"
+              <button
+                onClick={onOpenModal}
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-sm border border-white/10 transition-all cursor-pointer"
               >
                 Commander un service
-              </a>
+              </button>
             </div>
 
             <div className="pt-6 border-t border-white/10 flex flex-wrap items-center gap-6 text-xs sm:text-sm text-slate-400">
