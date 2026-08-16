@@ -49,7 +49,7 @@ export default function RegisterPage() {
         </div>
 
         {errorMsg && (
-          <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-xl font-medium animate-shake">
+          <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-xl font-medium">
             {errorMsg}
           </div>
         )}
