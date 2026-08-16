@@ -11,11 +11,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#05080E] text-white">
-      {/* Passe bien la fonction ainsi */}
+      {/* Navigation et Hero */}
       <Navbar onOpenModal={() => setIsModalOpen(true)} />
       <Hero onOpenModal={() => setIsModalOpen(true)} />
-      
-      {/* ... le reste de ton code ... */}
       
       {/* ==========================================
           SECTION 1 : QAVELYO PRODUCTS (Le Hub / Store d'Apps)
@@ -34,7 +32,7 @@ export default function Home() {
         </div>
 
         {/* Grille des Applications Disponibles / En catalogue */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           
           {/* Produit 1 : QAVELYO CV */}
           <div className="glass-panel rounded-2xl p-6 border border-white/10 hover:border-[#FF6B00]/50 transition-all flex flex-col justify-between group">
@@ -65,7 +63,36 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Produit 2 : Prochainement */}
+          {/* Produit 2 : QAVELYO LINK MANAGER */}
+          <div className="glass-panel rounded-2xl p-6 border border-white/10 hover:border-[#FF6B00]/50 transition-all flex flex-col justify-between group">
+            <div>
+              <div className="flex justify-between items-start mb-4">
+                <span className="text-2xl">🔗</span>
+                <span className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  Disponible
+                </span>
+              </div>
+              <h3 className="text-xl font-bold text-white group-hover:text-[#FF6B00] transition-colors mb-2">
+                QAVELYO Link
+              </h3>
+              <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                Centralisez tous vos liens importants sur une seule page élégante, personnalisable et partageable en un flash avec un QR code.
+              </p>
+            </div>
+            <div>
+              <Link
+                href="/qavelyo-link"
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white text-sm font-semibold transition-all border border-[#FF6B00] shadow-lg shadow-[#FF6B00]/20"
+              >
+                Découvrir Qavelyo Link
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          {/* Produit 3 : Prochainement */}
           <div className="glass-panel rounded-2xl p-6 border border-white/10 hover:border-[#FF6B00]/50 transition-all flex flex-col justify-between group">
             <div>
               <div className="flex justify-between items-start mb-4">
@@ -198,25 +225,63 @@ export default function Home() {
       {/* ==========================================
           SECTION 4 : CONTACT & COMMANDE DE SERVICE
           ========================================== */}
-      <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5 text-center">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
-            Une idée ? Un besoin ?
-          </h2>
-          <p className="text-slate-300 text-base sm:text-lg">
-            Vous avez une idée, un besoin ou un problème qui pourrait être résolu par le numérique ? Parlons-en et imaginons ensemble une solution.
-          </p>
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-8 py-4 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white font-semibold text-base shadow-lg shadow-[#FF6B00]/25 transition-all cursor-pointer"
-            >
-              Parler de mon projet
-            </button>
+      <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Colonne de gauche : Infos & Direct */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF6B00]/10 border border-[#FF6B00]/30 text-[#FF6B00] text-xs font-semibold uppercase tracking-wider">
+              CONTACT & COLLABORATION
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+              Une idée ? Un besoin ? <br />
+              <span className="text-[#FF6B00]">Parlons-en.</span>
+            </h2>
+            <p className="text-slate-300 text-base leading-relaxed">
+              Vous avez un projet de site web, d'application SaaS ou un besoin spécifique pour votre activité ? Notre équipe est à votre écoute pour concevoir la solution idéale.
+            </p>
+            
+            <div className="space-y-4 pt-2">
+              <div className="flex items-center gap-4 glass-panel p-4 rounded-2xl border border-white/10">
+                <div className="w-10 h-10 rounded-xl bg-[#FF6B00]/10 flex items-center justify-center text-[#FF6B00] text-xl">📧</div>
+                <div>
+                  <div className="text-xs text-slate-400 font-mono">Écrivez-nous</div>
+                  <div className="text-white font-semibold text-sm">qavelyo@gmail.com</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 glass-panel p-4 rounded-2xl border border-white/10">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl">⚡</div>
+                <div>
+                  <div className="text-xs text-slate-400 font-mono">Disponibilité</div>
+                  <div className="text-white font-semibold text-sm">Réponse rapide sous 24h</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-slate-500 pt-2">
-            Contact direct : <span className="text-slate-300">qavelyo@gmail.com</span>
-          </p>
+
+          {/* Colonne de droite : Carte d'action d'appel au formulaire */}
+          <div className="lg:col-span-6">
+            <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-white/10 text-center space-y-6 relative overflow-hidden group hover:border-[#FF6B00]/50 transition-all">
+              <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-[#FF6B00]/10 rounded-full blur-3xl group-hover:bg-[#FF6B00]/20 transition-all" />
+              
+              <div className="text-4xl">🚀</div>
+              <h3 className="text-2xl font-bold text-white">Lancer votre projet avec QAVELYO</h3>
+              <p className="text-slate-400 text-sm leading-relaxed max-w-md mx-auto">
+                Cliquez ci-dessous pour ouvrir notre assistant de commande interactif. Choisissez votre service, votre budget et envoyez-nous votre brief en un clic.
+              </p>
+
+              <div className="pt-2">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white font-semibold text-base shadow-lg shadow-[#FF6B00]/25 transition-all cursor-pointer"
+                >
+                  Ouvrir le formulaire de projet
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
