@@ -5,13 +5,16 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export async function updateProfileInDB(profile: Partial<UserProfile>) {
+export async function updateProfileInDB(profile: Partial<UserProfile> & { id?: string }) {
   try {
+    // On extrait l'id proprement pour rassurer TypeScript
+    const profileId = profile.id;
+
     // On essaie de mettre à jour ou d'insérer le profil basé sur le username ou l'id
     const { data, error } = await supabase
       .from("profiles")
       .upsert({
-        ...(profile.id ? { id: profile.id } : {}),
+        ...(profileId ? { id: profileId } : {}),
         username: profile.username || "aka",
         name: profile.name,
         profession: profile.profession,
