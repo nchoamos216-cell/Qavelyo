@@ -14,6 +14,9 @@ interface Profile {
   bio?: string;
   avatar_url?: string;
   "URL de l'avatar"?: string;
+  // Ajout des champs pour éviter les erreurs de type
+  avatar?: string; 
+  image?: string;
   thème?: string;
   primary_color?: string;
   "couleur primaire"?: string;
@@ -48,14 +51,13 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
         setLoading(true);
         console.log("Recherche du profil pour :", username);
 
-        // Essai 1 : Recherche sur la colonne française "nom d'utilisateur"
+        // 1. Recherche du profil (sur 'nom d'utilisateur' ou 'username')
         let { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('*')
           .eq("nom d'utilisateur", username)
           .maybeSingle();
 
-        // Essai 2 : Si non trouvé, on essaie sur la colonne anglaise "username"
         if (!profileData) {
           const res = await supabase
             .from('profiles')
@@ -76,25 +78,39 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
 
         setProfile(profileData);
 
-        // Incrémentation des vues
+        // 2. Incrémentation des vues
         const currentViews = profileData.vues || 0;
         await supabase
           .from('profiles')
           .update({ vues: currentViews + 1 })
           .eq('id', profileData.id);
 
-        // Parsing des liens
-        let parsedLinks: UserLink[] = [];
+        // 3. Récupération des liens (Gestion des deux cas : Colonne JSON ou Table séparée)
+        let fetchedLinks: UserLink[] = [];
+
         if (profileData.links) {
           try {
-            parsedLinks = typeof profileData.links === 'string' 
+            fetchedLinks = typeof profileData.links === 'string' 
               ? JSON.parse(profileData.links) 
               : profileData.links;
           } catch (e) {
-            console.error('Erreur parsing links :', e);
+            console.error('Erreur parsing links JSON :', e);
           }
         }
-        setLinks(Array.isArray(parsedLinks) ? parsedLinks : []);
+
+        // Si aucun lien trouvé dans le JSON, on essaie de les récupérer depuis une table 'links' dédiée
+        if (!fetchedLinks || fetchedLinks.length === 0) {
+          const { data: linksTableData, error: linksError } = await supabase
+            .from('links')
+            .select('*')
+            .eq('user_id', profileData.id);
+
+          if (!linksError && linksTableData) {
+            fetchedLinks = linksTableData;
+          }
+        }
+
+        setLinks(Array.isArray(fetchedLinks) ? fetchedLinks : []);
 
       } catch (err) {
         console.error('Erreur chargement profil public :', err);
@@ -133,8 +149,8 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
 
   const getButtonRadiusClass = () => {
     const style = profile.style_de_bouton || profile.button_style;
-    if (style?.includes('pill')) return 'rounded-full';
-    if (style?.includes('sharp')) return 'rounded-none';
+    if (style?.includes('pill') || style?.includes('rounded-full')) return 'rounded-full';
+    if (style?.includes('sharp') || style?.includes('rounded-none')) return 'rounded-none';
     return 'rounded-2xl';
   };
 
@@ -143,7 +159,13 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
   };
 
   const displayName = profile["nom et prénom"] || profile.full_name || profile.nom || profile["nom d'utilisateur"] || profile.username || 'Utilisateur';
-  const displayAvatar = profile["URL de l'avatar"] || profile.avatar_url;
+  
+  // Utilisation du chaînage optionnel et des clés sécurisées
+    const displayAvatar = 
+  profile["URL de l'avatar"] || 
+  profile.avatar_url || 
+  (profile as any)["avatar"] || 
+  (profile as any)["image"];
   const primaryColor = profile["couleur primaire"] || profile.primary_color || '#FF6B00';
   const currentAlias = profile["nom d'utilisateur"] || profile.username || username;
 
@@ -157,7 +179,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
       <div className="w-full max-w-md mx-auto space-y-8 z-10">
         <div className="flex flex-col items-center text-center space-y-4">
           <div 
-            className="w-24 h-24 rounded-full p-1 shadow-xl overflow-hidden bg-gradient-to-tr"
+            className="w-24 h-24 rounded-full p-1 shadow-xl overflow-hidden bg-gradient-to-tr shrink-0"
             style={{ backgroundImage: `linear-gradient(to top right, ${primaryColor}, #f59e0b)` }}
           >
             {displayAvatar ? (
