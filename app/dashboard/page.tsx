@@ -13,7 +13,9 @@ interface LinkItem {
 interface Profile {
   id: string;
   username?: string;
+  "nom d'utilisateur"?: string;
   full_name?: string;
+  nom?: string;
   profession?: string;
   bio?: string;
   avatar_url?: string;
@@ -21,7 +23,7 @@ interface Profile {
   primary_color?: string;
   button_style?: string;
   vues?: number;
-  links?: LinkItem[];
+  links?: LinkItem[] | string;
 }
 
 export default function DashboardPage() {
@@ -31,7 +33,7 @@ export default function DashboardPage() {
   const [uploading, setUploading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Form states (utilisant les noms de colonnes standardisés et propres)
+  // Form states
   const [fullName, setFullName] = useState('');
   const [profession, setProfession] = useState('');
   const [bio, setBio] = useState('');
@@ -66,12 +68,12 @@ export default function DashboardPage() {
 
         if (profileData) {
           setProfile(profileData);
-          setFullName(profileData.full_name || '');
+          setFullName(profileData.full_name || profileData.nom || '');
           setProfession(profileData.profession || '');
           setBio(profileData.bio || '');
-          setAvatarUrl(profileData.avatar_url || '');
-          setPrimaryColor(profileData.primary_color || '#FF6B00');
-          setButtonStyle(profileData.button_style || 'arrondi-xl');
+          setAvatarUrl(profileData.avatar_url || profileData["URL de l'avatar"] || '');
+          setPrimaryColor(profileData.primary_color || profileData["couleur primaire"] || '#FF6B00');
+          setButtonStyle(profileData.button_style || profileData.style_de_bouton || 'arrondi-xl');
           
           let parsedLinks = profileData.links;
           if (typeof parsedLinks === 'string') {
@@ -89,7 +91,6 @@ export default function DashboardPage() {
     fetchUserData();
   }, []);
 
-  // Fonction pour gérer l'upload d'image depuis la galerie avec typage correct
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       if (!e.target.files || e.target.files.length === 0 || !profile) return;
@@ -100,14 +101,12 @@ export default function DashboardPage() {
       const fileName = `${profile.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
 
-      // Upload vers le bucket Supabase nommé "avatars"
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, { upsert: true });
 
       if (uploadError) throw uploadError;
 
-      // Récupérer l'URL publique
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
         .getPublicUrl(filePath);
@@ -127,6 +126,8 @@ export default function DashboardPage() {
 
     try {
       setSaving(true);
+      
+      // Utilisation exclusive des colonnes standard en anglais pour éviter les erreurs de cache Supabase
       const updatedData = {
         full_name: fullName,
         profession,
@@ -173,9 +174,11 @@ export default function DashboardPage() {
     setLinks(links.filter((l) => l.id !== id));
   };
 
+  const currentUsername = profile?.username || profile?.["nom d'utilisateur"] || '';
+
   const copyPublicLink = () => {
-    if (!profile?.username) return;
-    const publicUrl = `${window.location.origin}/${profile.username}`;
+    if (!currentUsername) return;
+    const publicUrl = `${window.location.origin}/${currentUsername}`;
     navigator.clipboard.writeText(publicUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
@@ -189,20 +192,17 @@ export default function DashboardPage() {
     );
   }
 
-  const username = profile?.username || '';
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 pb-20 text-white min-h-screen">
-      {/* Top Header premium avec le bouton "Voir ma page" */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 bg-white/[0.03] p-6 rounded-3xl border border-white/10 backdrop-blur-md shadow-2xl">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Mon Dashboard Qavelyo</h1>
           <p className="text-xs text-slate-400 mt-1">Gérez votre mini-site et personnalisez vos informations en direct.</p>
         </div>
 
-        {username && (
+        {currentUsername && (
           <a
-            href={`/${username}`}
+            href={`/${currentUsername}`}
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 rounded-2xl bg-[#FF6B00] hover:bg-[#e05e00] text-white text-xs font-bold transition-all shadow-lg shadow-[#FF6B00]/25 flex items-center gap-2.5 shrink-0 cursor-pointer"
@@ -215,13 +215,10 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Main Container */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Formulaires d'édition */}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Bloc Lien Personnalisé & Stats */}
           <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 relative overflow-hidden shadow-lg">
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF6B00]/10 rounded-full blur-2xl pointer-events-none" />
             <h2 className="text-lg font-bold mb-2">Votre lien personnalisé</h2>
@@ -231,7 +228,7 @@ export default function DashboardPage() {
               <input
                 type="text"
                 readOnly
-                value={username ? `${typeof window !== 'undefined' ? window.location.origin : ''}/${username}` : 'Chargement...'}
+                value={currentUsername ? `${typeof window !== 'undefined' ? window.location.origin : ''}/${currentUsername}` : 'Chargement...'}
                 className="bg-transparent text-sm text-slate-300 px-3 w-full outline-none font-mono"
               />
               <button
@@ -248,7 +245,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Formulaire Informations Personnelles */}
           <form onSubmit={handleSaveProfile} className="p-6 sm:p-8 rounded-3xl bg-white/[0.02] border border-white/10 space-y-6 shadow-lg">
             <h2 className="text-xl font-bold border-b border-white/10 pb-4">Informations personnelles</h2>
 
@@ -276,7 +272,6 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Upload de photo */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-slate-300">Photo de profil (Avatar)</label>
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/15">
@@ -372,7 +367,6 @@ export default function DashboardPage() {
             </div>
           </form>
 
-          {/* Gestion des Liens */}
           <div className="p-6 sm:p-8 rounded-3xl bg-white/[0.02] border border-white/10 space-y-6 shadow-lg">
             <h2 className="text-xl font-bold border-b border-white/10 pb-4">Mes Liens</h2>
 
@@ -430,7 +424,6 @@ export default function DashboardPage() {
 
         </div>
 
-        {/* Aperçu en direct (Live Preview) */}
         <div className="lg:col-span-1">
           <div className="sticky top-24 p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col items-center shadow-lg">
             <span className="text-xs font-mono text-slate-400 mb-4 uppercase tracking-wider">Aperçu en direct</span>
@@ -446,7 +439,7 @@ export default function DashboardPage() {
                   <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover rounded-full bg-black" />
                 ) : (
                   <div className="w-full h-full rounded-full bg-black flex items-center justify-center text-lg font-bold" style={{ color: primaryColor }}>
-                    {(fullName || username || 'U').charAt(0).toUpperCase()}
+                    {(fullName || currentUsername || 'U').charAt(0).toUpperCase()}
                   </div>
                 )}
               </div>
@@ -454,7 +447,7 @@ export default function DashboardPage() {
               <div className="text-center mt-3 space-y-0.5 z-10 w-full px-2">
                 <h3 className="text-sm font-bold truncate text-white">{fullName || 'Nom d\'utilisateur'}</h3>
                 {profession && <p className="text-[11px] font-medium truncate" style={{ color: primaryColor }}>{profession}</p>}
-                <p className="text-[10px] text-slate-400 font-mono">@{username || 'alias'}</p>
+                <p className="text-[10px] text-slate-400 font-mono">@{currentUsername || 'alias'}</p>
                 {bio && <p className="text-[11px] text-slate-300 mt-2 line-clamp-2 leading-relaxed">{bio}</p>}
               </div>
 
