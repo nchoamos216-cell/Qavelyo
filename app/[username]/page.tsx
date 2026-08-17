@@ -78,6 +78,9 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
 
         setProfile(profileData);
 
+        console.log("Données profil récupérées :", profileData);
+        console.log("Liens récupérés dans le profil :", profileData.links);
+
         // 2. Incrémentation des vues
         const currentViews = profileData.vues || 0;
         await supabase
