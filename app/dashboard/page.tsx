@@ -12,16 +12,14 @@ interface LinkItem {
 
 interface Profile {
   id: string;
-  "nom d'utilisateur"?: string;
-  nom?: string;
-  "nom et prénom"?: string;
+  username?: string;
+  full_name?: string;
   profession?: string;
   bio?: string;
-  "URL de l'avatar"?: string;
-  thème?: string;
-  "couleur primaire"?: string;
-  style_de_bouton?: string;
-  "style de fond"?: string;
+  avatar_url?: string;
+  theme?: string;
+  primary_color?: string;
+  button_style?: string;
   vues?: number;
   links?: LinkItem[];
 }
@@ -33,7 +31,7 @@ export default function DashboardPage() {
   const [uploading, setUploading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Form states
+  // Form states (utilisant les noms de colonnes standardisés et propres)
   const [fullName, setFullName] = useState('');
   const [profession, setProfession] = useState('');
   const [bio, setBio] = useState('');
@@ -42,7 +40,7 @@ export default function DashboardPage() {
   const [buttonStyle, setButtonStyle] = useState('arrondi-xl');
   const [links, setLinks] = useState<LinkItem[]>([]);
   
-  // Nouveau lien inputs
+  // Nouveaux liens inputs
   const [newTitle, setNewTitle] = useState('');
   const [newUrl, setNewUrl] = useState('');
 
@@ -68,12 +66,12 @@ export default function DashboardPage() {
 
         if (profileData) {
           setProfile(profileData);
-          setFullName(profileData["nom et prénom"] || '');
+          setFullName(profileData.full_name || '');
           setProfession(profileData.profession || '');
           setBio(profileData.bio || '');
-          setAvatarUrl(profileData["URL de l'avatar"] || '');
-          setPrimaryColor(profileData["couleur primaire"] || '#FF6B00');
-          setButtonStyle(profileData.style_de_bouton || 'arrondi-xl');
+          setAvatarUrl(profileData.avatar_url || '');
+          setPrimaryColor(profileData.primary_color || '#FF6B00');
+          setButtonStyle(profileData.button_style || 'arrondi-xl');
           
           let parsedLinks = profileData.links;
           if (typeof parsedLinks === 'string') {
@@ -91,7 +89,7 @@ export default function DashboardPage() {
     fetchUserData();
   }, []);
 
-  // Fonction pour gérer l'upload d'image depuis la galerie
+  // Fonction pour gérer l'upload d'image depuis la galerie avec typage correct
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       if (!e.target.files || e.target.files.length === 0 || !profile) return;
@@ -99,10 +97,10 @@ export default function DashboardPage() {
 
       const file = e.target.files[0];
       const fileExt = file.name.split('.').pop();
-     const fileName = `${profile.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const fileName = `${profile.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
 
-      // Upload vers le bucket Supabase nommé "avatars" (assure-toi qu'il existe)
+      // Upload vers le bucket Supabase nommé "avatars"
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, { upsert: true });
@@ -117,7 +115,7 @@ export default function DashboardPage() {
       setAvatarUrl(publicUrl);
     } catch (err: any) {
       console.error("Erreur lors de l'upload de l'image :", err);
-      alert("Erreur lors de l'upload de l'image. Vérifie que le bucket 'avatars' existe dans Supabase.");
+      alert("Erreur lors de l'upload : " + (err.message || "Vérifiez le bucket 'avatars'."));
     } finally {
       setUploading(false);
     }
@@ -130,14 +128,14 @@ export default function DashboardPage() {
     try {
       setSaving(true);
       const updatedData = {
-        "nom et prénom": fullName,
+        full_name: fullName,
         profession,
         bio,
-        "URL de l'avatar": avatarUrl || null,
-        "couleur primaire": primaryColor,
-        style_de_bouton: buttonStyle,
+        avatar_url: avatarUrl || null,
+        primary_color: primaryColor,
+        button_style: buttonStyle,
         links: links,
-        "mis à jour_à": new Date().toISOString()
+        updated_at: new Date().toISOString()
       };
 
       const { error } = await supabase
@@ -147,9 +145,9 @@ export default function DashboardPage() {
 
       if (error) throw error;
       alert('Modifications enregistrées avec succès ! 🚀');
-    } catch (err) {
-      console.error('Erreur lors de la sauvegarde :', err);
-      alert('Une erreur est survenue lors de la sauvegarde.');
+    } catch (err: any) {
+      console.error('Erreur lors de la sauvegarde :', err.message || err);
+      alert('Erreur : ' + (err.message || 'Une erreur est survenue.'));
     } finally {
       setSaving(false);
     }
@@ -176,8 +174,8 @@ export default function DashboardPage() {
   };
 
   const copyPublicLink = () => {
-    if (!profile?.["nom d'utilisateur"]) return;
-    const publicUrl = `${window.location.origin}/${profile["nom d'utilisateur"]}`;
+    if (!profile?.username) return;
+    const publicUrl = `${window.location.origin}/${profile.username}`;
     navigator.clipboard.writeText(publicUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
@@ -191,15 +189,15 @@ export default function DashboardPage() {
     );
   }
 
-  const username = profile?.["nom d'utilisateur"] || '';
+  const username = profile?.username || '';
 
   return (
-    <div className="max-w-6xl mx-auto pb-20">
-      {/* Top Header simple pour le lien public */}
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-6xl mx-auto px-4 py-8 pb-20 text-white min-h-screen">
+      {/* Top Header premium avec le bouton "Voir ma page" */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 bg-white/[0.03] p-6 rounded-3xl border border-white/10 backdrop-blur-md shadow-2xl">
         <div>
-          <h1 className="text-2xl font-extrabold text-white">Mon Dashboard</h1>
-          <p className="text-xs text-slate-400 mt-1">Gérez votre mini-site et personnalisez vos informations.</p>
+          <h1 className="text-2xl font-extrabold tracking-tight">Mon Dashboard Qavelyo</h1>
+          <p className="text-xs text-slate-400 mt-1">Gérez votre mini-site et personnalisez vos informations en direct.</p>
         </div>
 
         {username && (
@@ -207,10 +205,10 @@ export default function DashboardPage() {
             href={`/${username}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-medium px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all flex items-center gap-2"
+            className="px-6 py-3 rounded-2xl bg-[#FF6B00] hover:bg-[#e05e00] text-white text-xs font-bold transition-all shadow-lg shadow-[#FF6B00]/25 flex items-center gap-2.5 shrink-0 cursor-pointer"
           >
-            <span>Voir mon profil public</span>
-            <svg className="w-3.5 h-3.5 text-[#FF6B00]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span>👁️ Voir ma page publique</span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
@@ -223,7 +221,8 @@ export default function DashboardPage() {
         {/* Formulaires d'édition */}
         <div className="lg:col-span-2 space-y-8">
           
-          <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 relative overflow-hidden">
+          {/* Bloc Lien Personnalisé & Stats */}
+          <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 relative overflow-hidden shadow-lg">
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF6B00]/10 rounded-full blur-2xl pointer-events-none" />
             <h2 className="text-lg font-bold mb-2">Votre lien personnalisé</h2>
             <p className="text-xs text-slate-400 mb-4">Partagez votre mini-site Qavelyo partout sur vos réseaux.</p>
@@ -236,8 +235,9 @@ export default function DashboardPage() {
                 className="bg-transparent text-sm text-slate-300 px-3 w-full outline-none font-mono"
               />
               <button
+                type="button"
                 onClick={copyPublicLink}
-                className="px-5 py-2.5 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white text-xs font-bold transition-all shadow-lg shadow-[#FF6B00]/20 shrink-0 cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 shrink-0 cursor-pointer"
               >
                 {copied ? 'Copié !' : 'Copier'}
               </button>
@@ -248,7 +248,8 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <form onSubmit={handleSaveProfile} className="p-6 sm:p-8 rounded-3xl bg-white/[0.02] border border-white/10 space-y-6">
+          {/* Formulaire Informations Personnelles */}
+          <form onSubmit={handleSaveProfile} className="p-6 sm:p-8 rounded-3xl bg-white/[0.02] border border-white/10 space-y-6 shadow-lg">
             <h2 className="text-xl font-bold border-b border-white/10 pb-4">Informations personnelles</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -275,7 +276,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Upload de photo depuis la galerie */}
+            {/* Upload de photo */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-slate-300">Photo de profil (Avatar)</label>
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/15">
@@ -314,7 +315,6 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
-              {/* Couleur primaire avec sélecteur visuel et filtres rapides */}
               <div className="space-y-2">
                 <label className="text-xs font-medium text-slate-300">Couleur primaire & Filtres</label>
                 <div className="flex items-center gap-3">
@@ -331,7 +331,6 @@ export default function DashboardPage() {
                     className="w-full px-3 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs font-mono uppercase outline-none"
                   />
                 </div>
-                {/* Boutons de filtres / préréglages rapides de couleurs */}
                 <div className="flex items-center gap-1.5 pt-1 flex-wrap">
                   {colorPresets.map((color) => (
                     <button
@@ -374,7 +373,7 @@ export default function DashboardPage() {
           </form>
 
           {/* Gestion des Liens */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-white/[0.02] border border-white/10 space-y-6">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white/[0.02] border border-white/10 space-y-6 shadow-lg">
             <h2 className="text-xl font-bold border-b border-white/10 pb-4">Mes Liens</h2>
 
             <form onSubmit={handleAddLink} className="grid grid-cols-1 sm:grid-cols-5 gap-3 bg-black/20 p-4 rounded-2xl border border-white/5">
@@ -433,7 +432,7 @@ export default function DashboardPage() {
 
         {/* Aperçu en direct (Live Preview) */}
         <div className="lg:col-span-1">
-          <div className="sticky top-24 p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col items-center">
+          <div className="sticky top-24 p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col items-center shadow-lg">
             <span className="text-xs font-mono text-slate-400 mb-4 uppercase tracking-wider">Aperçu en direct</span>
 
             <div className="w-[280px] min-h-[500px] bg-[#05080E] border-4 border-slate-800 rounded-[36px] p-4 flex flex-col items-center shadow-2xl relative overflow-hidden">

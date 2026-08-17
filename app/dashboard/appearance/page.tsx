@@ -1,13 +1,9 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import { UserProfile } from '@/types/link';
 import { updateProfileInDB } from '@/lib/db';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key";
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Liste des couleurs prédéfinies Premium (avec le Noir Profond)
 const COLOR_PRESETS = [
@@ -36,13 +32,23 @@ export default function DashboardAppearancePage() {
     async function fetchProfile() {
       try {
         setLoading(true);
-        const { data } = await supabase.from('profiles').select('*').limit(1).single();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
         if (data) {
           setProfile(data);
           if (data.primaryColor) setQrColor(data.primaryColor);
+        } else if (error) {
+          console.error('Erreur chargement profil :', error);
         }
       } catch (err) {
-        console.error('Erreur chargement :', err);
+        console.error('Erreur :', err);
       } finally {
         setLoading(false);
       }
@@ -76,7 +82,7 @@ export default function DashboardAppearancePage() {
 
   if (loading || !profile) {
     return (
-      <div className="min-h-[60vh] bg-[#05080E] text-white flex items-center justify-center">
+      <div className="min-h-[60vh] text-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-6 h-6 border-2 border-[#FF6B00] border-t-transparent rounded-full animate-spin"></div>
           <p className="text-xs font-mono text-slate-400">Chargement de l'espace design...</p>
@@ -146,7 +152,7 @@ export default function DashboardAppearancePage() {
                   key={color.value}
                   type="button"
                   onClick={() => handleChange('primaryColor', color.value)}
-                  className={`flex items-center gap-3 p-3.5 rounded-2xl border text-xs font-semibold transition-all group ${
+                  className={`flex items-center gap-3 p-3.5 rounded-2xl border text-xs font-semibold transition-all group cursor-pointer ${
                     isSelected
                       ? 'border-[#FF6B00] bg-[#FF6B00]/15 text-white shadow-lg shadow-[#FF6B00]/20 ring-1 ring-[#FF6B00]'
                       : 'border-white/10 bg-white/[0.02] text-slate-300 hover:bg-white/[0.06] hover:border-white/20'
@@ -191,7 +197,7 @@ export default function DashboardAppearancePage() {
           <select
             value={profile.buttonStyle || 'rounded-xl'}
             onChange={(e) => handleChange('buttonStyle', e.target.value)}
-            className="w-full bg-black/40 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#FF6B00] transition-colors"
+            className="w-full bg-black/40 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#FF6B00] transition-colors cursor-pointer"
           >
             <option value="rounded-xl" className="bg-[#05080E]">Moderne Arrondi (Rounded)</option>
             <option value="rounded-full" className="bg-[#05080E]">Totalement Ovale (Pill)</option>
@@ -205,7 +211,7 @@ export default function DashboardAppearancePage() {
           <select
             value={profile.backgroundStyle || 'solid'}
             onChange={(e) => handleChange('backgroundStyle', e.target.value)}
-            className="w-full bg-black/40 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#FF6B00] transition-colors"
+            className="w-full bg-black/40 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#FF6B00] transition-colors cursor-pointer"
           >
             <option value="solid" className="bg-[#05080E]">Uni Sombre Élégant (Solid)</option>
             <option value="gradient" className="bg-[#05080E]">Dégradé Futuriste (Gradient)</option>
@@ -215,7 +221,7 @@ export default function DashboardAppearancePage() {
         <button
           type="submit"
           disabled={saving}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#FF6B00] to-[#ff8c38] hover:from-[#e56000] hover:to-[#ff7b1a] font-extrabold text-sm transition-all shadow-xl shadow-[#FF6B00]/25 disabled:opacity-50 text-white flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#FF6B00] to-[#ff8c38] hover:from-[#e56000] hover:to-[#ff7b1a] font-extrabold text-sm transition-all shadow-xl shadow-[#FF6B00]/25 disabled:opacity-50 text-white flex items-center justify-center gap-2 cursor-pointer"
         >
           {saving ? (
             <>
@@ -268,7 +274,7 @@ export default function DashboardAppearancePage() {
             <button
               type="button"
               onClick={handleDownloadQRCode}
-              className="w-full py-3.5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-bold text-xs transition-all border border-white/10 flex items-center justify-center gap-2 group shadow-lg"
+              className="w-full py-3.5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-bold text-xs transition-all border border-white/10 flex items-center justify-center gap-2 group shadow-lg cursor-pointer"
             >
               <span className="group-hover:translate-y-0.5 transition-transform">📥</span> Télécharger le QR Code (PNG HD)
             </button>

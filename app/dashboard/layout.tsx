@@ -25,7 +25,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const navItems = [
     { name: 'Mon Dashboard', href: '/dashboard' },
     { name: 'Liens', href: '/dashboard/links' },
+    { name: 'Mon Profil', href: '/dashboard/profile' },
     { name: 'Apparence & QR', href: '/dashboard/appearance' },
+    { name: 'Partager', href: '/dashboard/share' },
     { name: 'Statistiques', href: '/dashboard/analytics' },
     { name: 'Aide', href: '/dashboard/help' },
   ];
