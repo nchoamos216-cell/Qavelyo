@@ -28,7 +28,7 @@ export default function CVHomePage() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100 overflow-x-hidden">
       
       {/* BOUTON MENU PRINCIPAL */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 w-full">
@@ -43,25 +43,25 @@ export default function CVHomePage() {
 
       {/* SECTION HERO */}
       <section className="relative py-16 md:py-24 px-4 overflow-hidden text-center">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#FF6B00]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96 bg-[#FF6B00]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto relative z-10 space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF6B00]/10 border border-[#FF6B00]/30 text-[#FF6B00] text-xs font-semibold">
             ✨ Outil 100% Gratuit & Rapide
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
             Créez un CV professionnel qui <span className="text-[#FF6B00]">démarque</span> votre profil
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed px-2">
             Remplissez vos informations, choisissez un modèle moderne adapté au marché et téléchargez votre CV au format PDF en quelques minutes.
           </p>
 
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
             <Link
               href="/cv/create"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white text-sm font-bold shadow-lg shadow-[#FF6B00]/25 transition-all hover:scale-105"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white text-sm font-bold shadow-lg shadow-[#FF6B00]/25 transition-all hover:scale-105 text-center"
             >
               Créer mon CV maintenant
             </Link>
@@ -72,7 +72,7 @@ export default function CVHomePage() {
                 event.preventDefault();
                 scrollToModels();
               }}
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 text-slate-300 hover:text-white text-sm font-semibold transition"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 text-slate-300 hover:text-white text-sm font-semibold transition text-center"
             >
               Découvrir les modèles
             </a>
@@ -88,8 +88,8 @@ export default function CVHomePage() {
             <p className="text-sm text-slate-400">3 étapes simples pour obtenir votre CV prêt à l'emploi</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-2xl bg-[#05080E] border border-white/10 space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="p-6 rounded-2xl bg-[#05080E] border border-white/10 space-y-3 shadow-md">
               <div className="w-10 h-10 rounded-xl bg-[#FF6B00]/20 text-[#FF6B00] flex items-center justify-center font-bold text-lg">
                 1
               </div>
@@ -99,7 +99,7 @@ export default function CVHomePage() {
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-[#05080E] border border-white/10 space-y-3">
+            <div className="p-6 rounded-2xl bg-[#05080E] border border-white/10 space-y-3 shadow-md">
               <div className="w-10 h-10 rounded-xl bg-[#FF6B00]/20 text-[#FF6B00] flex items-center justify-center font-bold text-lg">
                 2
               </div>
@@ -109,7 +109,7 @@ export default function CVHomePage() {
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-[#05080E] border border-white/10 space-y-3">
+            <div className="p-6 rounded-2xl bg-[#05080E] border border-white/10 space-y-3 shadow-md">
               <div className="w-10 h-10 rounded-xl bg-[#FF6B00]/20 text-[#FF6B00] flex items-center justify-center font-bold text-lg">
                 3
               </div>
@@ -123,17 +123,17 @@ export default function CVHomePage() {
       </section>
 
       {/* SECTION NOS 15 MODÈLES DE CV */}
-      <section id="modeles" className="py-20 px-4 max-w-7xl mx-auto space-y-12 scroll-mt-20">
+      <section id="modeles" className="py-20 px-4 max-w-7xl mx-auto space-y-12 scroll-mt-20 w-full">
         <div className="text-center space-y-3">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white">Nos Modèles de CV</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">Nos 15 Modèles de CV Professionnels</h2>
           <p className="text-sm text-slate-400">Des designs modernes et optimisés pour tous les secteurs d'activité</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {templates.map((tpl) => (
             <div 
               key={tpl.id} 
-              className="group p-5 rounded-2xl bg-[#05080E] border border-white/10 flex flex-col justify-between space-y-4 hover:border-[#FF6B00]/60 transition-all duration-300 hover:-translate-y-1"
+              className="group p-5 rounded-2xl bg-[#05080E] border border-white/10 flex flex-col justify-between space-y-4 hover:border-[#FF6B00]/60 transition-all duration-300 hover:-translate-y-1 shadow-lg"
             >
               <div className={`h-48 rounded-xl bg-gradient-to-br ${tpl.color} p-4 border border-white/10 relative overflow-hidden flex flex-col justify-between`}>
                 <div className="flex justify-between items-center">
@@ -154,15 +154,15 @@ export default function CVHomePage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-1">
-                <div>
-                  <h3 className="font-bold text-white text-sm">{tpl.name}</h3>
-                  <p className="text-[11px] text-slate-400 truncate max-w-[180px]">{tpl.tag}</p>
+              <div className="flex items-center justify-between pt-1 gap-2">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-bold text-white text-sm truncate">{tpl.name}</h3>
+                  <p className="text-[11px] text-slate-400 truncate">{tpl.tag}</p>
                 </div>
                 
                 <Link
                   href={createUrl(tpl.id)}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#FF6B00]/10 hover:bg-[#FF6B00] text-[#FF6B00] hover:text-white border border-[#FF6B00]/30 transition-all"
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#FF6B00]/10 hover:bg-[#FF6B00] text-[#FF6B00] hover:text-white border border-[#FF6B00]/30 transition-all whitespace-nowrap flex-shrink-0"
                 >
                   Utiliser →
                 </Link>
