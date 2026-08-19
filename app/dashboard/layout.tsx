@@ -40,9 +40,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       
       {/* BARRE DE NAVIGATION MOBILE */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-white/10 bg-[#030509] sticky top-0 z-50">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <Image src="/Qavelyo.png" alt="Logo" width={28} height={28} className="rounded-full border border-[#FF6B00]/40" />
-          <span className="font-extrabold text-sm tracking-wider">QAVELYO <span className="text-[#FF6B00]">LINK</span></span>
+        <Link href="/dashboard" className="flex items-center gap-2.5">
+          <Image src="/Qavelyo.png" alt="Logo" width={32} height={32} className="rounded-full border border-[#FF6B00]/40 flex-shrink-0" />
+          <div className="flex flex-col leading-tight">
+            <span className="font-extrabold text-sm tracking-wider text-white">
+              QAVEL<span className="text-[#FF6B00]">Y</span>O
+            </span>
+            <span className="text-[9px] font-bold tracking-widest text-[#FF6B00] uppercase -mt-0.5">
+              Link
+            </span>
+          </div>
         </Link>
         
         <button 
@@ -81,10 +88,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className="w-64 border-r border-white/10 p-6 hidden md:flex flex-col bg-[#030509] min-h-screen">
         <div className="mb-10">
           <Link href="/dashboard" className="flex items-center gap-3 group" title="Accueil Dashboard">
-            <Image src="/Qavelyo.png" alt="QAVELYO Logo" width={32} height={32} className="rounded-full border border-[#FF6B00]/40 group-hover:scale-105 transition-transform" />
-            <span className="font-extrabold tracking-wider text-white text-base">
-              QAVELYO <span className="text-[#FF6B00]">LINK</span>
-            </span>
+            <Image src="/Qavelyo.png" alt="QAVELYO Logo" width={36} height={36} className="rounded-full border border-[#FF6B00]/40 group-hover:scale-105 transition-transform flex-shrink-0" />
+            <div className="flex flex-col leading-tight">
+              <span className="font-extrabold tracking-wider text-white text-base">
+                QAVELT<span className="text-[#FF6B00]">Y</span>O
+              </span>
+              <span className="text-[10px] font-bold tracking-widest text-[#FF6B00] uppercase -mt-0.5">
+                Link
+              </span>
+            </div>
           </Link>
         </div>
 

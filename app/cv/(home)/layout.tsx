@@ -21,18 +21,23 @@ export default function CVLayout({
         <header className="border-b border-white/10 bg-[#05080E]/90 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
             
-            {/* Logo CV */}
+            {/* Logo CV empilé avec le Y coloré */}
             <Link href="/cv" className="flex items-center gap-2.5 group flex-shrink-0" title="Accueil CV QAVELYO">
               <Image
                 src="/Qavelyo.png"
                 alt="QAVELYO Logo"
-                width={32}
-                height={32}
+                width={36}
+                height={36}
                 className="rounded-full border border-[#FF6B00]/40 group-hover:scale-105 transition-transform"
               />
-              <span className="font-extrabold tracking-wider text-white text-sm sm:text-base whitespace-nowrap">
-                QAVELYO <span className="text-[#FF6B00]">CV</span>
-              </span>
+              <div className="flex flex-col leading-tight">
+                <span className="font-extrabold tracking-wider text-white text-sm sm:text-base">
+                  QAVEL<span className="text-[#FF6B00]">Y</span>O
+                </span>
+                <span className="text-[10px] font-bold tracking-widest text-[#FF6B00] uppercase -mt-0.5">
+                  CV
+                </span>
+              </div>
             </Link>
 
             {/* Navigation Desktop */}

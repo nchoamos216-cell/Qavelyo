@@ -14,14 +14,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       {/* HEADER MODERNE */}
       <header className="border-b border-white/5 bg-[#05080E]/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* LOGO */}
+          
+          {/* LOGO EMPILÉ AVEC Y COLORÉ */}
           <Link href="/" className="flex items-center gap-3 group transition-transform hover:opacity-90">
-            <div className="relative w-8 h-8 rounded-full border border-[#FF6B00]/40 overflow-hidden shadow-lg shadow-[#FF6B00]/20">
+            <div className="relative w-9 h-9 rounded-full border border-[#FF6B00]/40 overflow-hidden shadow-lg shadow-[#FF6B00]/20 flex-shrink-0">
               <Image src="/Qavelyo.png" alt="Logo" fill className="object-cover" />
             </div>
-            <span className="font-extrabold text-white text-base tracking-wider">
-              QAVELYO <span className="text-[#FF6B00]">LINK</span>
-            </span>
+            <div className="flex flex-col leading-tight">
+              <span className="font-extrabold text-white text-sm sm:text-base tracking-wider">
+                QAVEL<span className="text-[#FF6B00]">Y</span>O
+              </span>
+              <span className="text-[10px] font-bold tracking-widest text-[#FF6B00] uppercase -mt-0.5">
+                Link
+              </span>
+            </div>
           </Link>
 
           {/* NAVIGATION DROITE */}
@@ -48,7 +54,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <footer className="py-16 border-t border-white/5 bg-[#030509]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-3">
-            <span className="font-extrabold text-white">QAVELYO <span className="text-[#FF6B00]">LINK</span></span>
+            <div className="flex flex-col leading-tight inline-flex">
+              <span className="font-extrabold text-white">QAVEL<span className="text-[#FF6B00]">Y</span>O</span>
+              <span className="text-[9px] font-bold tracking-widest text-[#FF6B00] uppercase">Link</span>
+            </div>
             <p className="text-xs text-slate-500 max-w-xs">
               La solution complète pour centraliser votre identité numérique avec élégance et performance.
             </p>

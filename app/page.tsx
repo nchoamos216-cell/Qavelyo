@@ -92,11 +92,40 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Produit 3 : Prochainement */}
+          {/* Produit 3 : QAVELYO SHARE */}
           <div className="glass-panel rounded-2xl p-6 border border-white/10 hover:border-[#FF6B00]/50 transition-all flex flex-col justify-between group">
             <div>
               <div className="flex justify-between items-start mb-4">
                 <span className="text-2xl">⚡</span>
+                <span className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  Disponible
+                </span>
+              </div>
+              <h3 className="text-xl font-bold text-white group-hover:text-[#FF6B00] transition-colors mb-2">
+                QAVELYO Share
+              </h3>
+              <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                Transférez des fichiers, photos, liens et textes instantanément entre deux appareils sans inscription ni câble.
+              </p>
+            </div>
+            <div>
+              <Link
+                href="/share"
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#e05e00] text-white text-sm font-semibold transition-all border border-[#FF6B00] shadow-lg shadow-[#FF6B00]/20"
+              >
+                Essayer Qavelyo Share
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          {/* Produit 4 : Prochainement */}
+          <div className="glass-panel rounded-2xl p-6 border border-white/10 hover:border-[#FF6B00]/50 transition-all flex flex-col justify-between group">
+            <div>
+              <div className="flex justify-between items-start mb-4">
+                <span className="text-2xl">🚀</span>
                 <span className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   En développement
                 </span>
