@@ -6,7 +6,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 Mo max
+export const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 Mo max (limite Supabase)
 
 interface CreateShareParams {
   type: 'file' | 'text' | 'link';
@@ -25,7 +25,7 @@ export async function createShareSession({ type, file, rawContent }: CreateShare
 
   if (type === 'file' && file) {
     if (file.size > MAX_FILE_SIZE) {
-      throw new Error('Le fichier est trop volumineux (Maximum 100 Mo).');
+      throw new Error('Le fichier est trop volumineux (Maximum 50 Mo).');
     }
 
     fileName = file.name;
